@@ -24,39 +24,39 @@ android {
             buildConfigField "boolean", "DEVICE_ENABLED", "true"
             buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
         }
-        staging {
-            buildConfigField "boolean", "EEG_ENABLED", "true"
-            buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
-            buildConfigField "boolean", "DEVICE_ENABLED", "true"
-            buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
-        }
+//        staging {
+//            buildConfigField "boolean", "EEG_ENABLED", "true"
+//            buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
+//            buildConfigField "boolean", "DEVICE_ENABLED", "true"
+//            buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
+//        }
         debug {
             buildConfigField "boolean", "EEG_ENABLED", "true"
             buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
             buildConfigField "boolean", "DEVICE_ENABLED", "true"
             buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
         }
-        unitTests {
-            initWith (buildTypes.debug)
-            buildConfigField "boolean", "EEG_ENABLED", "false"
-            buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
-            buildConfigField "boolean", "DEVICE_ENABLED", "false"
-            buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
-        }
+//        unitTests {
+//            initWith (buildTypes.debug)
+//            buildConfigField "boolean", "EEG_ENABLED", "false"
+//            buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
+//            buildConfigField "boolean", "DEVICE_ENABLED", "false"
+//            buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
+//        }
     }
 
-    testBuildType "unitTests"
+//    testBuildType "unitTests"
+//
+//    defaultPublishConfig "full"
 
-    defaultPublishConfig "full"
-
-    productFlavors {
-        full{
-            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
-        }
-        lite{
-            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
-        }
-    }
+//    productFlavors {
+////        full{
+////            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
+////        }
+////        lite{
+////            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
+////        }
+//    }
     testOptions {
         unitTests.returnDefaultValues = true
     }
@@ -67,10 +67,10 @@ android {
 }
 
 
-
-configurations {
-    doclava
-}
+//
+//configurations {
+//    doclava
+//}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
@@ -79,7 +79,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    doclava 'com.google.doclava:doclava:1.0.6'
+//    doclava 'com.google.doclava:doclava:1.0.6'
 
     testImplementation 'org.powermock:powermock-api-mockito2:1.7.4'
     testImplementation 'org.mockito:mockito-core:2.8.9'
@@ -172,56 +172,24 @@ dependencies {
 //}
 
 //Task to generate sources into Jar file
-task liteSourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
+task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
-    from (android.sourceSets.lite.java.srcDirs){
-        exclude('core')
-        exclude('eventbus')
-    }
+    classifier = 'sources'
 }
 
-task fullSourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    from android.sourceSets.main.java.srcDirs
-    from android.sourceSets.full.java.srcDirs
-}
-
-//Task to generate javadoc as html
-task liteJavadoc(type: Javadoc) {
+task javadoc(type: Javadoc) {
     options.charSet = 'UTF-8'
     failOnError  false
     source = android.sourceSets.main.java.sourceFiles
-    source += android.sourceSets.lite.java.sourceFiles
-
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
-task fullJavadoc(type: Javadoc) {
-    options.charSet = 'UTF-8'
-    failOnError  false
-    source = android.sourceSets.main.java.sourceFiles
-    source += android.sourceSets.full.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-//Task to generate javadoc as Jar file from html task
-task liteJavadocJar(type: Jar, dependsOn: liteJavadoc) {
-    archiveClassifier.set('javadoc')
-    from liteJavadoc.destinationDir
-}
-
-//Task to generate javadoc as Jar file from html task
-task fullJavadocJar(type: Jar, dependsOn: fullJavadoc) {
-    archiveClassifier.set('javadoc')
-    from fullJavadoc.destinationDir
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
 }
 
 artifacts {
-    archives liteSourcesJar
-    archives fullSourcesJar
-
-    archives liteJavadocJar
-    archives fullJavadocJar
-
+    archives sourcesJar
+    archives javadocJar
 }
