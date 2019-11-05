@@ -47,18 +47,18 @@ android {
 
 //    testBuildType "unitTests"
 //
-//    defaultPublishConfig "fullRelease"
-//
-//    productFlavors {
-//        full{
-//            dimension "default"
-//            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
-//        }
-//        lite{
-//            dimension "default"
-//            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
-//        }
-//    }
+    defaultPublishConfig "fullRelease"
+
+    productFlavors {
+        full{
+            dimension "default"
+            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
+        }
+        lite{
+            dimension "default"
+            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
+        }
+    }
     testOptions {
         unitTests.returnDefaultValues = true
     }
@@ -173,25 +173,55 @@ dependencies {
 //
 //}
 
-//Task to generate sources into Jar file
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
+////Task to generate sources into Jar file
+//task sourcesJar(type: Jar) {
+//    from android.sourceSets.main.java.srcDirs
+//    classifier = 'sources'
+//}
+//
+//task javadoc(type: Javadoc) {
+//    options.charSet = 'UTF-8'
+//    failOnError  false
+//    source = android.sourceSets.main.java.sourceFiles
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//}
+//
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+//
+//artifacts {
+//    archives sourcesJar
+//    archives javadocJar
+//}
+if (android.productFlavors.size() > 0) {
+    android.libraryVariants.all { variant ->
 
-task javadoc(type: Javadoc) {
-    options.charSet = 'UTF-8'
-    failOnError  false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
+        if (variant.name.toLowerCase().contains("debug")) {
+            return
+        }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
+        def bundleTask = tasks["bundle${variant.name.capitalize()}Aar"]
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
+        artifacts {
+            archives(bundleTask.archivePath) {
+                classifier variant.flavorName
+                builtBy bundleTask
+                name = project.name
+            }
+        }
+
+        def flavorName = variant.flavorName.toLowerCase()
+        def flavorSourcesTask = tasks.create(name : "${flavorName}SourcesJar", type: Jar) {
+            classifier = "${flavorName}-sources"
+            from android.sourceSets.main.javaDirectories
+            from android.sourceSets[flavorName].javaDirectories
+        }
+
+        artifacts {
+            archives flavorSourcesTask
+        }
+
+    }
 }
