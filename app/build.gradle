@@ -23,30 +23,29 @@ android {
             buildConfigField "boolean", "DEVICE_ENABLED", "true"
             buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
         }
-//        staging {
-//            buildConfigField "boolean", "EEG_ENABLED", "true"
-//            buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
-//            buildConfigField "boolean", "DEVICE_ENABLED", "true"
-//            buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
-//        }
+        staging {
+            buildConfigField "boolean", "EEG_ENABLED", "true"
+            buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
+            buildConfigField "boolean", "DEVICE_ENABLED", "true"
+            buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
+        }
         debug {
             buildConfigField "boolean", "EEG_ENABLED", "true"
             buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
             buildConfigField "boolean", "DEVICE_ENABLED", "true"
             buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
         }
-//        unitTests {
-//            initWith (buildTypes.debug)
-//            buildConfigField "boolean", "EEG_ENABLED", "false"
-//            buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
-//            buildConfigField "boolean", "DEVICE_ENABLED", "false"
-//            buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
-//        }
+        unitTests {
+            initWith (buildTypes.debug)
+            buildConfigField "boolean", "EEG_ENABLED", "false"
+            buildConfigField "boolean", "BLUETOOTH_ENABLED", "true"
+            buildConfigField "boolean", "DEVICE_ENABLED", "false"
+            buildConfigField "String", "FIRMWARE_VERSION", "\"1_7_4\""
+        }
     }
 
 //    testBuildType "unitTests"
 //
-    defaultPublishConfig "full"
 
     flavorDimensions "package"
 
@@ -204,33 +203,33 @@ artifacts {
     archives sourcesJar
 }
 
-if (android.productFlavors.size() > 0) {
-    android.libraryVariants.all { variant ->
-
-        if (variant.name.toLowerCase().contains("debug")) {
-            return
-        }
-
-        def bundleTask = tasks["bundle${variant.name.capitalize()}Aar"]
-
-        artifacts {
-            archives(bundleTask.archivePath) {
-                classifier variant.flavorName
-                builtBy bundleTask
-                name = project.name
-            }
-        }
-
-        def flavorName = variant.flavorName.toLowerCase()
-        def flavorSourcesTask = tasks.create(name : "${flavorName}SourcesJar", type: Jar) {
-            classifier = "${flavorName}-sources"
-            from android.sourceSets.main.javaDirectories
-            from android.sourceSets[flavorName].javaDirectories
-        }
-
-        artifacts {
-            archives flavorSourcesTask
-        }
-
-    }
-}
+//if (android.productFlavors.size() > 0) {
+//    android.libraryVariants.all { variant ->
+//
+//        if (variant.name.toLowerCase().contains("debug")) {
+//            return
+//        }
+//
+//        def bundleTask = tasks["bundle${variant.name.capitalize()}Aar"]
+//
+//        artifacts {
+//            archives(bundleTask.archivePath) {
+//                classifier variant.flavorName
+//                builtBy bundleTask
+//                name = project.name
+//            }
+//        }
+//
+//        def flavorName = variant.flavorName.toLowerCase()
+//        def flavorSourcesTask = tasks.create(name : "${flavorName}SourcesJar", type: Jar) {
+//            classifier = "${flavorName}-sources"
+//            from android.sourceSets.main.javaDirectories
+//            from android.sourceSets[flavorName].javaDirectories
+//        }
+//
+//        artifacts {
+//            archives flavorSourcesTask
+//        }
+//
+//    }
+//}
