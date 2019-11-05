@@ -46,16 +46,18 @@ android {
 
 //    testBuildType "unitTests"
 //
-//    defaultPublishConfig "full"
+    defaultPublishConfig "fullRelease"
 
-//    productFlavors {
-////        full{
-////            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
-////        }
-////        lite{
-////            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
-////        }
-//    }
+    productFlavors {
+        full{
+            dimension "default"
+            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
+        }
+        lite{
+            dimension "default"
+            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
+        }
+    }
     testOptions {
         unitTests.returnDefaultValues = true
     }
