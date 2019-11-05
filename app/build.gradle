@@ -47,7 +47,7 @@ android {
 
 //    testBuildType "unitTests"
 //
-    defaultPublishConfig "fullRelease"
+    defaultPublishConfig "full"
 
     productFlavors {
         full{
