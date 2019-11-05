@@ -220,7 +220,8 @@ if (android.productFlavors.size() > 0) {
 
         def flavorName = variant.flavorName.toLowerCase()
         def buildType = variant.buildType.name
-        def flavorSourcesTask = tasks.create(name : "${flavorName}${buildType}SourcesJar", type: Jar) {
+        def name = variant.name
+        def flavorSourcesTask = tasks.create(name : "${name}SourcesJar", type: Jar) {
             classifier = "${flavorName}-sources"
             from android.sourceSets.main.javaDirectories
             from android.sourceSets[flavorName].javaDirectories
