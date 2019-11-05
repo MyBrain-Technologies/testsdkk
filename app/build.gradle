@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group='com.github.mbt-administrator'
@@ -46,18 +47,18 @@ android {
 
 //    testBuildType "unitTests"
 //
-    defaultPublishConfig "fullRelease"
-
-    productFlavors {
-        full{
-            dimension "default"
-            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
-        }
-        lite{
-            dimension "default"
-            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
-        }
-    }
+//    defaultPublishConfig "fullRelease"
+//
+//    productFlavors {
+//        full{
+//            dimension "default"
+//            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
+//        }
+//        lite{
+//            dimension "default"
+//            buildConfigField "String", "USE_ALGO_VERSION", "\"2.3.1\""
+//        }
+//    }
     testOptions {
         unitTests.returnDefaultValues = true
     }
